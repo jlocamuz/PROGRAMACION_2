@@ -1,0 +1,55 @@
+{
+  "applications": "*",
+  "changelogDate": "20230304165839",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "menu",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nombre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "precio",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "urlImagen",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "activo",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "creado",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "actualizado",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Menu",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "venta",
+      "otherEntityRelationshipName": "menu",
+      "relationshipName": "venta",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "no"
+}

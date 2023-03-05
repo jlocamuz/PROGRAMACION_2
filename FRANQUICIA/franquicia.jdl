@@ -1,0 +1,22 @@
+// JDL file for JHipster application with React
+
+entity Venta {
+  fecha Instant,
+  precio Float,
+}
+
+entity Menu {
+  id String,
+  nombre String,
+  descripcion String,
+  precio Float,
+  urlImagen String,
+  activo Boolean,
+  creado Instant,
+  actualizado Instant,
+}
+
+relationship OneToMany {
+  Menu{venta} to Venta{menu}
+}
+

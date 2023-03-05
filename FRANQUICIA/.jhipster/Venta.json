@@ -1,0 +1,31 @@
+{
+  "applications": "*",
+  "changelogDate": "20230304165838",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "venta",
+  "fields": [
+    {
+      "fieldName": "fecha",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "precio",
+      "fieldType": "Float"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Venta",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "menu",
+      "otherEntityRelationshipName": "venta",
+      "relationshipName": "menu",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}
