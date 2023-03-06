@@ -66,8 +66,8 @@ public class Menu implements Serializable, Persistable<String> {
         return this;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String string) {
+        this.id = string;
     }
 
     public String getNombre() {
@@ -105,8 +105,8 @@ public class Menu implements Serializable, Persistable<String> {
         return this;
     }
 
-    public void setPrecio(Float precio) {
-        this.precio = precio;
+    public void setPrecio(double precio2) {
+        this.precio = (float) precio2;
     }
 
     public String getUrlImagen() {

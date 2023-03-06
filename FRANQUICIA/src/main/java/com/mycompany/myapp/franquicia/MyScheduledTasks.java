@@ -10,12 +10,17 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MyScheduledTasks {
-    
+
+    @Autowired
+    private SaveMenus saveMenus;
+ 
+
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
@@ -28,11 +33,11 @@ public class MyScheduledTasks {
     @Scheduled(cron = "0 * * * * ?")
     public void run() throws Exception {
         System.out.println("POST from MyScheduledTasks");
-        utilsJulia.sendHttpPostRequest(urlStringAccionString, requestBodyAccionString, bearertokenString); 
-    
+        String accionJson = utilsJulia.sendHttpPostRequest(); 
+        processResponse(accionJson);
     
     }
-    private void processResponse(String responseBody) {
+    public void processResponse(String responseBody) throws Exception{
         try (Scanner scanner = new Scanner(responseBody)) {
             scanner.useDelimiter(Pattern.compile("[\\r\\n]+"));
             String accion = null;
@@ -52,9 +57,10 @@ public class MyScheduledTasks {
             } else if (accion.equals("nada")) {
                 System.out.println("nothing is happening");
             } else if (accion.equals("reporte")) {
-                // generate report
+               
             } else if (accion.equals("menu")) {
-                // display menu
+                System.out.println("POST from MyApplicationRunner");
+                saveMenus.saveMenus();
             }
         }
     }
