@@ -1,0 +1,25 @@
+// JDL file for Servicio de Actualización en Segundo Plano
+
+entity Venta {
+    idVenta String
+    fecha Instant
+    precio Float
+    menu Integer
+}
+
+entity ReporteHistorico {
+  accion String
+  franquiciaUUID String
+  tipo String
+  fechaInicio Instant
+  fechaFin Instant
+}
+
+entity ReporteRecurrente {
+  accion String
+  franquiciaUUID String
+  tipo String
+  fechaInicio Instant
+  fechaFin Instant
+  intervalo String
+}
