@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20230306132325",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "reporte_recurrente",
+  "fields": [
+    {
+      "fieldName": "accion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "franquiciaUUID",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "fechaInicio",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "fechaFin",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "intervalo",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ReporteRecurrente",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

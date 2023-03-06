@@ -2,7 +2,6 @@
 
 entity Venta {
   fecha Instant,
-  precio Float,
 }
 
 entity Menu {

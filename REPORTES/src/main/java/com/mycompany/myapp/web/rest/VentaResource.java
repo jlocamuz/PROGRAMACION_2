@@ -1,8 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.Menu;
 import com.mycompany.myapp.domain.Venta;
-import com.mycompany.myapp.repository.MenuRepository;
 import com.mycompany.myapp.repository.VentaRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -12,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +25,6 @@ import tech.jhipster.web.util.ResponseUtil;
 @Transactional
 public class VentaResource {
 
-    @Autowired
-    private VentaRepository ventaRepository;
-    
-    @Autowired
-    private MenuRepository menuRepository; 
-    
     private final Logger log = LoggerFactory.getLogger(VentaResource.class);
 
     private static final String ENTITY_NAME = "venta";
@@ -41,7 +32,7 @@ public class VentaResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-
+    private final VentaRepository ventaRepository;
 
     public VentaResource(VentaRepository ventaRepository) {
         this.ventaRepository = ventaRepository;
@@ -54,21 +45,18 @@ public class VentaResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new venta, or with status {@code 400 (Bad Request)} if the venta has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-  
-     @PostMapping("/ventas")
-     public ResponseEntity<Venta> createVenta(@RequestBody Venta venta) throws URISyntaxException {
-       Optional<Menu> optionalMenu = menuRepository.findById(venta.getMenu().getId());
-       if (optionalMenu.isPresent() && optionalMenu.get().getActivo()) {
-        Menu menu = optionalMenu.get();
-        venta.setPrecio(menu.getPrecio());
+    @PostMapping("/ventas")
+    public ResponseEntity<Venta> createVenta(@RequestBody Venta venta) throws URISyntaxException {
+        log.debug("REST request to save Venta : {}", venta);
+        if (venta.getId() != null) {
+            throw new BadRequestAlertException("A new venta cannot already have an ID", ENTITY_NAME, "idexists");
+        }
         Venta result = ventaRepository.save(venta);
-        return ResponseEntity.created(new URI("/api/ventas/" + result.getId()))
-                             .body(result);
-      } else {
-        return ResponseEntity.badRequest().build();
-      }
-      
-     }
+        return ResponseEntity
+            .created(new URI("/api/ventas/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
+            .body(result);
+    }
 
     /**
      * {@code PUT  /ventas/:id} : Updates an existing venta.
@@ -81,7 +69,7 @@ public class VentaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/ventas/{id}")
-    public ResponseEntity<Venta> updateVenta(@PathVariable(value = "id", required = false) final Long id, @RequestBody Venta venta)
+    public ResponseEntity<Venta> updateVenta(@PathVariable(value = "id", required = false) final String id, @RequestBody Venta venta)
         throws URISyntaxException {
         log.debug("REST request to update Venta : {}, {}", id, venta);
         if (venta.getId() == null) {
@@ -95,10 +83,11 @@ public class VentaResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
+        venta.setIsPersisted();
         Venta result = ventaRepository.save(venta);
         return ResponseEntity
             .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, venta.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, venta.getId()))
             .body(result);
     }
 
@@ -114,8 +103,10 @@ public class VentaResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/ventas/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Venta> partialUpdateVenta(@PathVariable(value = "id", required = false) final Long id, @RequestBody Venta venta)
-        throws URISyntaxException {
+    public ResponseEntity<Venta> partialUpdateVenta(
+        @PathVariable(value = "id", required = false) final String id,
+        @RequestBody Venta venta
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Venta partially : {}, {}", id, venta);
         if (venta.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -137,15 +128,15 @@ public class VentaResource {
                 if (venta.getPrecio() != null) {
                     existingVenta.setPrecio(venta.getPrecio());
                 }
+                if (venta.getMenu() != null) {
+                    existingVenta.setMenu(venta.getMenu());
+                }
 
                 return existingVenta;
             })
             .map(ventaRepository::save);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, venta.getId().toString())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, venta.getId()));
     }
 
     /**
@@ -166,7 +157,7 @@ public class VentaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the venta, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/ventas/{id}")
-    public ResponseEntity<Venta> getVenta(@PathVariable Long id) {
+    public ResponseEntity<Venta> getVenta(@PathVariable String id) {
         log.debug("REST request to get Venta : {}", id);
         Optional<Venta> venta = ventaRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(venta);
@@ -179,12 +170,9 @@ public class VentaResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/ventas/{id}")
-    public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteVenta(@PathVariable String id) {
         log.debug("REST request to delete Venta : {}", id);
         ventaRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }
 }

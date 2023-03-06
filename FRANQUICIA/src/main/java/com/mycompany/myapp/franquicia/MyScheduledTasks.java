@@ -32,7 +32,7 @@ public class MyScheduledTasks {
     
     @Scheduled(cron = "0 * * * * ?")
     public void run() throws Exception {
-        System.out.println("POST from MyScheduledTasks");
+        System.out.println("FROM MyScheduledTasks.java");
         String accionJson = utilsJulia.sendHttpPostRequest(); 
         processResponse(accionJson);
     
@@ -55,11 +55,9 @@ public class MyScheduledTasks {
             if (accion == null) {
                 // unknown action
             } else if (accion.equals("nada")) {
-                System.out.println("nothing is happening");
             } else if (accion.equals("reporte")) {
                
             } else if (accion.equals("menu")) {
-                System.out.println("POST from MyApplicationRunner");
                 saveMenus.saveMenus();
             }
         }

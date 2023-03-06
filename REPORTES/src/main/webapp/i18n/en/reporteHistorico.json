@@ -1,0 +1,28 @@
+{
+  "reportesApp": {
+    "reporteHistorico": {
+      "home": {
+        "title": "Reporte Historicos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Reporte Historico",
+        "createOrEditLabel": "Create or edit a Reporte Historico",
+        "notFound": "No Reporte Historicos found"
+      },
+      "created": "A new Reporte Historico is created with identifier {{ param }}",
+      "updated": "A Reporte Historico is updated with identifier {{ param }}",
+      "deleted": "A Reporte Historico is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Reporte Historico {{ id }}?"
+      },
+      "detail": {
+        "title": "Reporte Historico"
+      },
+      "id": "ID",
+      "accion": "Accion",
+      "franquiciaUUID": "Franquicia UUID",
+      "tipo": "Tipo",
+      "fechaInicio": "Fecha Inicio",
+      "fechaFin": "Fecha Fin"
+    }
+  }
+}

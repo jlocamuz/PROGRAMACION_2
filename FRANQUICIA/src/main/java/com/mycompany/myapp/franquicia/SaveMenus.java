@@ -12,7 +12,16 @@ import org.springframework.stereotype.Component;
 import com.mycompany.myapp.domain.Menu;
 import com.mycompany.myapp.repository.MenuRepository;
 
+//If the JSON data points to an existing object in the database and some properties of that object are changed,
+// calling the menuRepository.save(newMenu) method will update the existing object's properties with the new values
+// provided in newMenu.
 
+//The save method performs an INSERT operation if the object with the specified id value does not exist in the
+// database, and an UPDATE operation if it does. Therefore, if the id of the newMenu object already exists 
+//in the database, the save method will update the corresponding object with the new property values.
+
+//In summary, calling menuRepository.save(newMenu) with an object that has the same id as an 
+//existing object in the database will result in an update of the existing object's properties.
 
 @Component
 public class SaveMenus {
@@ -64,7 +73,6 @@ public class SaveMenus {
 
                 try {
                     Menu savedMenu = menuRepository.save(newMenu);
-                    System.out.println(savedMenu);
                 } catch (Exception e) {
                     // TODO: handle exception
                 }
@@ -72,8 +80,12 @@ public class SaveMenus {
         } catch (Exception e) {
             // TODO: handle exception
         }
-
+        //The end result will be that the database will have the latest version of all menus with their properties 
+        // updated to the latest values provided in the new JSON.
         List<Menu> menus1= menuRepository.findAll();
-        menus1.forEach(menu -> System.out.println(menu));
+        //menus1.forEach(menu -> System.out.println(menu));
+        System.out.println("FROM SaveMenus.java");
+        menus1.forEach(menu -> System.out.println("Nombre: " + menu.getNombre() + ", Precio: " + menu.getPrecio()));
+
     }
 }
