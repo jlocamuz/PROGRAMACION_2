@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.mycompany.myapp.domain.Menu;
 import com.mycompany.myapp.repository.MenuRepository;
@@ -23,7 +24,7 @@ import com.mycompany.myapp.repository.MenuRepository;
 //In summary, calling menuRepository.save(newMenu) with an object that has the same id as an 
 //existing object in the database will result in an update of the existing object's properties.
 
-@Component
+@Service
 public class SaveMenus {
 
     @Autowired

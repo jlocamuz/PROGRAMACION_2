@@ -7,7 +7,10 @@ import com.mycompany.myapp.repository.VentaRepository;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -17,8 +20,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * REST controller for managing {@link com.mycompany.myapp.domain.Venta}.
@@ -27,6 +36,10 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api")
 @Transactional
 public class VentaResource {
+
+    
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Autowired
     private VentaRepository ventaRepository;
@@ -53,15 +66,41 @@ public class VentaResource {
      * @param venta the venta to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new venta, or with status {@code 400 (Bad Request)} if the venta has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws JsonProcessingException
      */
   
      @PostMapping("/ventas")
-     public ResponseEntity<Venta> createVenta(@RequestBody Venta venta) throws URISyntaxException {
+     public ResponseEntity<Venta> createVenta(@RequestBody Venta venta) throws URISyntaxException, JsonProcessingException {
        Optional<Menu> optionalMenu = menuRepository.findById(venta.getMenu().getId());
        if (optionalMenu.isPresent() && optionalMenu.get().getActivo()) {
         Menu menu = optionalMenu.get();
         venta.setPrecio(menu.getPrecio());
         Venta result = ventaRepository.save(venta);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> requestBodyMap = new HashMap<>();
+        requestBodyMap.put("idVenta", venta.getId().toString());
+        requestBodyMap.put("fecha", venta.getFecha().toString());
+        requestBodyMap.put("precio", venta.getPrecio().toString());
+        requestBodyMap.put("menu", menu.getId().toString());
+        //requestBodyMap.put("franquiciaID", "56b7688c-57c3-4f6f-95eb-39e568aa40e9");
+        String requestBody = objectMapper.writeValueAsString(requestBodyMap);
+        String urlString = "http://127.0.1.1:9090/api/ventas";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        String username = "admin";
+        String password = "admin";
+        String credentials = username + ":" + password;
+        String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
+        
+        headers.set("Authorization", "Basic " + encodedCredentials);
+    
+        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(urlString, request, String.class);
+        String responseBody = response.getBody();
+        System.out.println(responseBody);
+        System.out.println("HYHUUUUUU" + requestBody);
         return ResponseEntity.created(new URI("/api/ventas/" + result.getId()))
                              .body(result);
       } else {

@@ -2,6 +2,8 @@ package com.mycompany.myapp;
 
 import com.mycompany.myapp.config.ApplicationProperties;
 import com.mycompany.myapp.config.CRLFLogConverter;
+import com.mycompany.myapp.franquicia.RestTemplateConfig;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -24,6 +27,7 @@ import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableScheduling
+@Import(RestTemplateConfig.class)
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class FranquiciaApp {
 

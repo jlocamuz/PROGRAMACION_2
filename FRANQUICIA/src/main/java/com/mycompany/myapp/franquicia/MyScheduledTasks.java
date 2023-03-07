@@ -2,6 +2,7 @@ package com.mycompany.myapp.franquicia;
 
 import org.springframework.http.HttpHeaders;
 
+import java.time.Instant;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class MyScheduledTasks {
@@ -20,11 +23,14 @@ public class MyScheduledTasks {
     @Autowired
     private SaveMenus saveMenus;
  
-
     @Autowired
     private RestTemplate restTemplate;
+
     @Autowired
     private UtilsJulia utilsJulia;
+
+    @Autowired
+    private CrearReporte crearReporte;
     
     String urlStringAccionString = "http://10.101.102.1:8080/api/accion";
     String requestBodyAccionString = "{\"accion\": \"consulta\",\"franquiciaID\": \"56b7688c-57c3-4f6f-95eb-39e568aa40e9\"}";
@@ -37,29 +43,34 @@ public class MyScheduledTasks {
         processResponse(accionJson);
     
     }
-    public void processResponse(String responseBody) throws Exception{
-        try (Scanner scanner = new Scanner(responseBody)) {
-            scanner.useDelimiter(Pattern.compile("[\\r\\n]+"));
-            String accion = null;
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                if (line.contains("\"accion\"")) {
-                    String[] parts = line.split(":");
-                    if (parts.length == 2) {
-                        accion = parts[1].replace("}", "").trim().replaceAll("[\",]+", "");
-                    }
-                    break;
-                }
+
+    public void processResponse(String responseBody) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(responseBody);
+        String accion = rootNode.get("accion").asText();
+        System.out.println("accion: " + accion);
+        if (accion == null) {
+            // unknown action
+        } else if (accion.equals("nada")) {
+        } else if (accion.equals("reporte")) {
+            JsonNode accion1 = rootNode.get("accion");
+            JsonNode franquiciaUUID = rootNode.get("franquiciaUUID");
+
+            JsonNode tipo = rootNode.get("tipo");
+            JsonNode fechaInicio = rootNode.get("fechaInicio");
+            JsonNode fechaFin = rootNode.get("fechaFin");
+            JsonNode intervalo = rootNode.get("intervalo");
+            if (tipo.toString() == "recurrente") {
+                crearReporte.crearReporteRecurrente(accion1, franquiciaUUID, tipo, fechaInicio,fechaFin, intervalo);
+            } else if(tipo.toString() == "historico") {
+                crearReporte.crearReporteHistorico(accion1, franquiciaUUID, tipo, fechaInicio,fechaFin);
+
             }
-            System.out.println("accion: " + accion);
-            if (accion == null) {
-                // unknown action
-            } else if (accion.equals("nada")) {
-            } else if (accion.equals("reporte")) {
-               
-            } else if (accion.equals("menu")) {
-                saveMenus.saveMenus();
-            }
+
+            // Access the reporte field and do something with it
+        
+        } else if (accion.equals("menu")) {
+            saveMenus.saveMenus();
         }
     }
 }
