@@ -1,6 +1,8 @@
 package com.mycompany.myapp.franquicia;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.HashMap;
@@ -90,12 +92,14 @@ public class CrearReporte {
 
     public void crearReporteRecurrenteDePrueba() throws JsonProcessingException {
         
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
         
-        Instant instant = Instant.now();
+        Instant instant = zonedDateTime.toInstant();
+        System.out.println("NOWWWWWWWWWWWW" + instant);
         Instant finInstant = instant.plus(1, ChronoUnit.HOURS);
         crearReporteRecurrente("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "recurrente", instant.toString(),finInstant.toString(),  "PT30S");
         crearReporteHistorico("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "historico", instant.toString(),finInstant.toString());
-
     }
 
 

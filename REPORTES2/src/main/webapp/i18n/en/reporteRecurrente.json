@@ -1,0 +1,29 @@
+{
+  "reportes2App": {
+    "reporteRecurrente": {
+      "home": {
+        "title": "Reporte Recurrentes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Reporte Recurrente",
+        "createOrEditLabel": "Create or edit a Reporte Recurrente",
+        "notFound": "No Reporte Recurrentes found"
+      },
+      "created": "A new Reporte Recurrente is created with identifier {{ param }}",
+      "updated": "A Reporte Recurrente is updated with identifier {{ param }}",
+      "deleted": "A Reporte Recurrente is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Reporte Recurrente {{ id }}?"
+      },
+      "detail": {
+        "title": "Reporte Recurrente"
+      },
+      "id": "ID",
+      "accion": "Accion",
+      "franquiciaUUID": "Franquicia UUID",
+      "tipo": "Tipo",
+      "fechaInicio": "Fecha Inicio",
+      "fechaFin": "Fecha Fin",
+      "intervalo": "Intervalo"
+    }
+  }
+}

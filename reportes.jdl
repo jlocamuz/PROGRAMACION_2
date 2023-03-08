@@ -1,31 +1,25 @@
 // JDL file for Servicio de Actualización en Segundo Plano
 
 entity Venta {
-    id String, 
-    fecha Instant,
+    id String
+    fecha Instant
     precio Float
-    menu Integer,
+    menu Integer
 }
 
 entity ReporteHistorico {
-  fechaInicio Instant,
+  accion String
+  franquiciaUUID String
+  tipo String
+  fechaInicio Instant
   fechaFin Instant
 }
 
 entity ReporteRecurrente {
-  fechaInicio Instant,
-  fechaFin Instant,
-  frecuenciaEnMinutos Integer,
-  estado String
+  accion String
+  franquiciaUUID String
+  tipo String
+  fechaInicio Instant
+  fechaFin Instant
+  intervalo String
 }
-
-// Relación Uno-a-Muchos entre ReporteHistorico y Venta
-relationship OneToMany {
-  ReporteHistorico{venta} to Venta{reporteHistorico}
-}
-
-// Relación Uno-a-Muchos entre ReporteRecurrente y Venta
-relationship OneToMany {
-  ReporteRecurrente{venta} to Venta{reporteRecurrente}
-}
-

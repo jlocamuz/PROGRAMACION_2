@@ -34,5 +34,4 @@ public class UtilsJulia {
         return sendHttpPostRequest(urlString, requestBodyString, bearertokenString);
     }
 
-
 }
