@@ -64,6 +64,8 @@ public class MyApplicationRunner implements ApplicationRunner {
         System.out.println(menuRepository.count());
         // podria crear una venta. 
 
+        // creando menu
+
         crearReporte.crearReporteRecurrenteDePrueba();
 
         

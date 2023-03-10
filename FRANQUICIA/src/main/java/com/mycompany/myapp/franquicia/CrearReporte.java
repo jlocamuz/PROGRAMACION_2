@@ -27,6 +27,9 @@ public class CrearReporte {
     
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired 
+    private UtilsJulia utilsJulia;
     
     
     
@@ -57,6 +60,10 @@ public class CrearReporte {
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(urlString, request, String.class);
         System.out.println(response);
+        // bodystring 
+        System.out.println("creando reporte al servicio ppal");
+        utilsJulia.sendHttpPostRequest( "http://10.101.102.1:8080/api/crear-reporte", requestBody, "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqbG9jYW11eiIsImF1dGgiOiIiLCJleHAiOjE5OTIyNjIzMjV9.AP2Ckng1LLAkbtDp3af8NaP9FAE0zSvm5Dd18hgNmuKEwRkFLKgHVfz_M-xFsLYZGtIbAByPhE0AbzzmTeoXqw");
+
 
     }
   
@@ -94,10 +101,10 @@ public class CrearReporte {
 
     public void crearReporteRecurrenteDePrueba() throws JsonProcessingException {
         String intervalo = "PT15S";
-        Instant instant = Instant.now().plusSeconds(20); 
+        Instant instant = Instant.now().plusSeconds(15); 
         Instant finInstant = instant.plus(1, ChronoUnit.MINUTES);
-        crearReporteRecurrente("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "recurrente", instant.toString(),finInstant.toString(),  intervalo);
-        crearReporteHistorico("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "historico", instant.toString(),finInstant.toString());
+        crearReporteRecurrente("crear-reporte", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "recurrente", instant.toString(),finInstant.toString(),  intervalo);
+        crearReporteHistorico("crear-reporte", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "historico", instant.toString(),finInstant.toString());
 }
 
 

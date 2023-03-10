@@ -100,7 +100,7 @@ public class VentaResource {
         ResponseEntity<String> response = restTemplate.postForEntity(urlString, request, String.class);
         String responseBody = response.getBody();
         System.out.println(responseBody);
-        System.out.println("HYHUUUUUU" + requestBody);
+        System.out.println("VENTA CREADA" + requestBody);
         return ResponseEntity.created(new URI("/api/ventas/" + result.getId()))
                              .body(result);
       } else {

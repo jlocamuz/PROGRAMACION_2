@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.Instant;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,7 +27,9 @@ public class Venta implements Serializable {
     private Long id;
 
     @Column(name = "fecha")
-    private Instant fecha;
+    @NotNull
+    private Instant fecha =  Instant.now();
+
 
     @Column(name = "precio")
     private Float precio;

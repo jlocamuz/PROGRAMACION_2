@@ -59,6 +59,7 @@ public class ReporteRecurrenteResource {
             throw new BadRequestAlertException("A new reporteRecurrente cannot already have an ID", ENTITY_NAME, "idexists");
         }
         ReporteRecurrente result = reporteRecurrenteRepository.save(reporteRecurrente);
+        System.out.println("REPORTE ORIGINAL    "+ result.getFechaInicio());
 
         poster.start(reporteRecurrente);
         return ResponseEntity
