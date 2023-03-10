@@ -73,6 +73,7 @@ public class SaveMenus {
                 newMenu.setActualizado(actualizado);
 
                 try {
+                    System.out.println("creating menus");
                     Menu savedMenu = menuRepository.save(newMenu);
                 } catch (Exception e) {
                     // TODO: handle exception

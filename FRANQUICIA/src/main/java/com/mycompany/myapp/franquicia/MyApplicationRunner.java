@@ -34,7 +34,7 @@ import org.springframework.http.HttpEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.mycompany.myapp.repository.MenuRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
@@ -44,6 +44,8 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Autowired
     private RestTemplate restTemplate;
     
+    @Autowired
+    private MenuRepository menuRepository;
 
     @Autowired
     private SaveMenus saveMenus;
@@ -51,13 +53,18 @@ public class MyApplicationRunner implements ApplicationRunner {
     @Autowired
     private CrearReporte crearReporte;
 
+    @Autowired
+    private UtilsJulia utilsJulia;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
         System.out.println("FROM MyApplicationRunner.java");
-        saveMenus.saveMenus();
+        
+        System.out.println(menuRepository.count());
+        // podria crear una venta. 
+
         crearReporte.crearReporteRecurrenteDePrueba();
- 
 
         
     }

@@ -28,6 +28,8 @@ public class CrearReporte {
     @Autowired
     private RestTemplate restTemplate;
     
+    
+    
 
     public void crearReporteHistorico(String accion, String franquiciaUUID, String tipo, String string, String string2) throws JsonProcessingException {
 
@@ -82,7 +84,7 @@ public class CrearReporte {
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
         
         headers.set("Authorization", "Basic " + encodedCredentials);
-    
+
         HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(urlString, request, String.class);
         System.out.println(response);
@@ -91,16 +93,13 @@ public class CrearReporte {
 
 
     public void crearReporteRecurrenteDePrueba() throws JsonProcessingException {
-        
-        ZoneId zoneId = ZoneId.systemDefault();
-        ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
-        
-        Instant instant = zonedDateTime.toInstant();
-        System.out.println("NOWWWWWWWWWWWW" + instant);
-        Instant finInstant = instant.plus(1, ChronoUnit.HOURS);
-        crearReporteRecurrente("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "recurrente", instant.toString(),finInstant.toString(),  "PT30S");
+        String intervalo = "PT15S";
+        Instant instant = Instant.now().plusSeconds(20); 
+        Instant finInstant = instant.plus(1, ChronoUnit.MINUTES);
+        crearReporteRecurrente("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "recurrente", instant.toString(),finInstant.toString(),  intervalo);
         crearReporteHistorico("accion", "56b7688c-57c3-4f6f-95eb-39e568aa40e9", "historico", instant.toString(),finInstant.toString());
-    }
+}
+
 
 
     public void crearReporteRecurrente(JsonNode accion1, JsonNode franquiciaUUID, JsonNode tipo, JsonNode fechaInicio,
