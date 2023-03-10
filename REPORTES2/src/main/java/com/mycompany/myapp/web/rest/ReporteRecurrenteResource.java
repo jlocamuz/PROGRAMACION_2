@@ -60,12 +60,13 @@ public class ReporteRecurrenteResource {
         }
         ReporteRecurrente result = reporteRecurrenteRepository.save(reporteRecurrente);
 
-        poster.setReporteRecurrente(result);
-        poster.executeAction();
+        poster.start(reporteRecurrente);
         return ResponseEntity
             .created(new URI("/api/reporte-recurrentes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+
+            
     }
     
 
